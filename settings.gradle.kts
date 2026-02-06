@@ -59,4 +59,4 @@ gradle.beforeProject {
   }
 }
 
-rootProject.name = "TACZEnchantmentsOverhaul"
+rootProject.name = "TaCZEnchantmentsOverhaul"

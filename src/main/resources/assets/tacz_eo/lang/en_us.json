@@ -1,0 +1,45 @@
+{
+  "enchantment.tacz_eo.bullseye": "Bullseye",
+  "enchantment.tacz_eo.deep_impact": "Deep Impact",
+  "enchantment.tacz_eo.firepower": "Firepower",
+  "enchantment.tacz_eo.precision": "Precision",
+  "enchantment.tacz_eo.punch_through": "Punch Through",
+
+  "config.tacz_eo.title": "TACZ - Enchantment Overhaul Config",
+  "config.tacz_eo.category.enchantment_balancing": "Enchantment Balancing",
+  "config.tacz_eo.category.enchantment_balancing.tooltip": "Settings related to balancing the enchantments added by this mod.",
+
+  "config.tacz_eo.option.max_level": "Maximum Level",
+  "config.tacz_eo.option.base_enchantability": "Base Enchantability",
+  "config.tacz_eo.option.base_enchantability.description": "The minimum enchantability required to obtain the first level of the enchantment.",
+  "config.tacz_eo.option.level_enchantability": "Level Enchantability",
+  "config.tacz_eo.option.level_enchantability.description": "The additional enchantability required for each subsequent level of the enchantment.",
+  "config.tacz_eo.option.enchantability_span": "Enchantability Span",
+  "config.tacz_eo.option.enchantability_span.description": "When added to the base and level enchantability, this value determines the maximum enchantability where the enchantment can be obtained.",
+
+  "config.tacz_eo.category.enchantment_balancing.group.bullseye": "Bullseye Enchantment",
+  "config.tacz_eo.category.enchantment_balancing.group.bullseye.description": "Increases projectile damage based on the enchantment level when a headshot is landed.",
+  "config.tacz_eo.option.bullseye_headshot_bonus": "Headshot Damage Bonus",
+
+  "config.tacz_eo.category.enchantment_balancing.group.deep_impact": "Deep Impact Enchantment",
+  "config.tacz_eo.category.enchantment_balancing.group.deep_impact.description": "Increases projectile armour penetration based on the enchantment level.",
+  "config.tacz_eo.option.deep_impact_armor_piercing_bonus": "Armor Piercing Bonus",
+
+  "config.tacz_eo.category.enchantment_balancing.group.firepower": "Firepower Enchantment",
+  "config.tacz_eo.category.enchantment_balancing.group.firepower.description": "Increases projectile damage based on the enchantment level.",
+  "config.tacz_eo.option.firepower_damage_multiplier": "Damage Multiplier",
+
+  "config.tacz_eo.category.enchantment_balancing.group.precision": "Precision Enchantment",
+  "config.tacz_eo.category.enchantment_balancing.group.precision.description": "Reduces projectile spread based on the enchantment level.",
+  "config.tacz_eo.option.precision_accuracy_bonus": "Accuracy Bonus",
+
+  "config.tacz_eo.category.enchantment_balancing.group.punch_through": "Punch Through Enchantment",
+  "config.tacz_eo.category.enchantment_balancing.group.punch_through.description": "Increases projectile penetration through entities based on the enchantment level.",
+  "config.tacz_eo.option.punch_through_count": "Entities Penetrated",
+
+  "config.tacz_eo.category.enchantment_whitelisting": "Enchantment Whitelisting",
+  "config.tacz_eo.category.enchantment_whitelisting.tooltip": "Settings related to whitelisting which weapons can use verious enchantments.",
+  "config.tacz_eo.category.enchantment_whitelisting.info": "Due to limitations with YACL, to add or remove an enchantment from the below list, you must edit the config file directly located at: config/tacz_enchantments_overhaul.json5",
+  "config.tacz_eo.option.enchantment_whitelist": "%s",
+  "config.tacz_eo.option.enchantment_whitelist.description": "Guns that can be enchanted with %s. Use the format 'packid:gunid' to specify items. Example: 'tacz:aug'."
+}

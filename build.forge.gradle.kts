@@ -30,12 +30,21 @@ val loader: String by project
 base.archivesName = "${mod("id")}-${mod("version")}+$minecraft-$loader"
 
 dependencies {
-  implementation("curse.maven:timeless-and-classic-zero-1028108:7401617")
-  compileOnly("curse.maven:timeless-and-classic-zero-1028108:7401617-sources-7401617")
+  modImplementation("curse.maven:timeless-and-classic-zero-1028108:6654541-sources-6654541")
+  modImplementation("dev.isxander:yet-another-config-lib:3.6.1+1.20.1-forge")
 
-  implementation("maven.modrinth:tacz-tweaks:2.12.2")
-  runtimeOnly("thedarkcolour:kotlinforforge:4.11.0")
-  runtimeOnly("dev.isxander:yet-another-config-lib:3.6.1+1.20.1-forge")
+  modImplementation("maven.modrinth:tacz-tweaks:2.10.0")
+  modRuntimeOnly("thedarkcolour:kotlinforforge:4.11.0")
+
+  modImplementation("curse.maven:tacz-durability-1065328:7389190")
+
+  implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3")!!)
+  jarJar(implementation("io.github.llamalad7:mixinextras-forge:0.5.3")!!)
+
+  implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")!!)
+  jarJar(implementation("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.7-beta.1")!!)
+
+  annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }
 
 java {
@@ -82,9 +91,15 @@ legacyForge {
 
   afterEvaluate {
     runs.configureEach {
-//      applyMixinDebugSettings(::jvmArgument, ::systemProperty)
+      applyMixinDebugSettings(::jvmArgument, ::systemProperty)
     }
   }
+}
+
+mixin {
+  add(sourceSets.main.get(), "${mod("id")}.refmap.json")
+  config("${mod("id")}.mixin.json")
+  config("${mod("id")}.client.mixin.json")
 }
 
 sourceSets.main {
@@ -97,11 +112,23 @@ tasks {
     dependsOn("stonecutterGenerate")
   }
 
-  register<Copy>("buildAndCollect") {
-    group = "build"
-    from(jar.map { it.archiveFile })
-    into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
-    dependsOn("build")
+  named<Jar>("jar") {
+    finalizedBy("reobfJar")
+
+    manifest {
+      attributes(
+        "Specification-Title" to mod("name")!!,
+        "Specification-Vendor" to "${mod("author")}",
+        "Specification-Version" to "1",
+        "Implementation-Title" to project.name,
+        "Implementation-Version" to mod("version")!!,
+        "Implementation-Vendor" to "${mod("author")}",
+        "MixinConfigs" to listOf(
+          "${mod("id")}.mixin.json",
+          "${mod("id")}.client.mixin.json"
+        ).joinToString(", ")
+      )
+    }
   }
 }
 
