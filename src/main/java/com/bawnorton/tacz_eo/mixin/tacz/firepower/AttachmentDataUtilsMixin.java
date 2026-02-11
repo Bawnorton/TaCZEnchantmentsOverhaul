@@ -5,7 +5,6 @@ import com.bawnorton.tacz_eo.enchantment.TACZEOEnchantments;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.tacz.guns.resource.pojo.data.gun.GunData;
 import com.tacz.guns.util.AttachmentDataUtils;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +18,7 @@ abstract class AttachmentDataUtilsMixin {
 	)
 	private static double applyEnchantmentDamageBonus(double original, ItemStack gunItem, GunData gunData) {
 		TACZEOEnchantment firepower = TACZEOEnchantments.FIREPOWER.get();
-		float damageBonus = firepower.getDamageBonus(gunItem.getEnchantmentLevel(firepower), MobType.UNDEFINED, gunItem);
+		float damageBonus = firepower.getGunDamageBonus(gunItem.getEnchantmentLevel(firepower), gunItem);
 		return original + damageBonus;
 	}
 }

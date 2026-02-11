@@ -15,17 +15,13 @@
     "tacz.EntityKineticBulletMixin",
     "tacz.ItemMixin",
     "tacz.bullseye.AttachmentDataUtilsMixin",
-    "tacz.bullseye.HeadShotModifierMixin",
-    "tacz.deep_impact.ArmorIgnoreModifierMixin",
     "tacz.deep_impact.AttachmentDataUtilsMixin",
     "tacz.deep_impact.EntityKineticBulletMixin",
     "tacz.firepower.AttachmentDataUtilsMixin",
-    "tacz.firepower.DamageModifierMixin",
-    "tacz.precision.InaccuracyModifierMixin",
     "tacz.precision.ModernKineticGunScriptAPIMixin",
     "tacz.punch_through.EntityKineticBulletMixin",
-    "tacz.punch_through.PierceModifierMixin",
-    "tacz_durability.ModernKineticGunItemMixinSquared"
+    "tacz_durability.ModernKineticGunItemMixinSquared",
+    "tacz_tweaks.BulletInteractionManagerMixin"
   ],
   "mixinextras": {
     "minVersion": "0.5.0"

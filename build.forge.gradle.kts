@@ -30,13 +30,15 @@ val loader: String by project
 base.archivesName = "${mod("id")}-${mod("version")}+$minecraft-$loader"
 
 dependencies {
-  modImplementation("curse.maven:timeless-and-classic-zero-1028108:6654541-sources-6654541")
+  modImplementation("curse.maven:timeless-and-classic-zero-1028108:7401617-sources-7401617")
   modImplementation("dev.isxander:yet-another-config-lib:3.6.1+1.20.1-forge")
 
-  modImplementation("maven.modrinth:tacz-tweaks:2.10.0")
+  modImplementation("maven.modrinth:tacz-tweaks:2.12.2")
   modRuntimeOnly("thedarkcolour:kotlinforforge:4.11.0")
 
   modImplementation("curse.maven:tacz-durability-1065328:7389190")
+
+  modImplementation("curse.maven:tacz-additions-1356005:7085167")
 
   implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3")!!)
   jarJar(implementation("io.github.llamalad7:mixinextras-forge:0.5.3")!!)
@@ -87,6 +89,13 @@ legacyForge {
 
       systemProperty("terminal.ansi", "true")
     }
+
+    register("server") {
+      ideName = "Forge Server $minecraft"
+      server()
+
+      systemProperty("terminal.ansi", "true")
+    }
   }
 
   afterEvaluate {
@@ -112,9 +121,14 @@ tasks {
     dependsOn("stonecutterGenerate")
   }
 
-  named<Jar>("jar") {
-    finalizedBy("reobfJar")
+  register<Copy>("buildAndCollect") {
+    group = "build"
+    from(named<Jar>("reobfJar").map { it.archiveFile })
+    into(rootProject.layout.buildDirectory.file("libs/${mod("version")}"))
+    dependsOn("build")
+  }
 
+  named<Jar>("jar") {
     manifest {
       attributes(
         "Specification-Title" to mod("name")!!,

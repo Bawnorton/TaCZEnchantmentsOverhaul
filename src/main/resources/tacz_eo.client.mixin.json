@@ -10,6 +10,11 @@
     "minVersion": "0.5.0"
   },
   "client": [
+    "tacz.bullseye.HeadShotModifierMixin",
+    "tacz.deep_impact.ArmorIgnoreModifierMixin",
+    "tacz.firepower.DamageModifierMixin",
+    "tacz.precision.InaccuracyModifierMixin",
+    "tacz.punch_through.PierceModifierMixin",
     "tacz.ClientGunTooltipMixin"
   ],
   "refmap": "tacz_eo.refmap.json"

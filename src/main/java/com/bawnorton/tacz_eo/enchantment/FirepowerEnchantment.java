@@ -5,9 +5,7 @@ import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.resource.index.CommonGunIndex;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 import java.util.Optional;
@@ -33,7 +31,7 @@ public class FirepowerEnchantment extends TACZEOEnchantment {
 	}
 
 	@Override
-	public float getDamageBonus(int level, MobType mobType, ItemStack enchantedItem) {
+	public float getGunDamageBonus(int level, ItemStack enchantedItem) {
 		if(enchantedItem.getItem() instanceof IGun gun) {
 			Optional<CommonGunIndex> commonGunIndex = TimelessAPI.getCommonGunIndex(gun.getGunId(enchantedItem));
 			if(commonGunIndex.isPresent()) {
@@ -42,6 +40,6 @@ public class FirepowerEnchantment extends TACZEOEnchantment {
 						.getDamageAmount() * (TACZEOConfig.get().firepowerDamageMultiplier * level);
 			}
 		}
-		return super.getDamageBonus(level, mobType, enchantedItem);
+		return super.getGunDamageBonus(level, enchantedItem);
 	}
 }

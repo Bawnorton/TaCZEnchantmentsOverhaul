@@ -1,4 +1,4 @@
-package com.bawnorton.tacz_eo.mixin.tacz.deep_impact;
+package com.bawnorton.tacz_eo.client.mixin.tacz.deep_impact;
 
 import com.bawnorton.tacz_eo.enchantment.TACZEOEnchantment;
 import com.bawnorton.tacz_eo.enchantment.TACZEOEnchantments;
