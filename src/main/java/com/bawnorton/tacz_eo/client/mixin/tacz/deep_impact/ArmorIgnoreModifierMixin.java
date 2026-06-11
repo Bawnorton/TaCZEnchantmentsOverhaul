@@ -22,7 +22,7 @@ abstract class ArmorIgnoreModifierMixin {
 	)
 	private Float applyEnchantmentArmourPierceBonus(Float original, ItemStack gunItem) {
 		TACZEOEnchantment deepImpact = TACZEOEnchantments.DEEP_IMPACT.get();
-		float piercingBonus = deepImpact.getArmourPiercingBonus(gunItem.getEnchantmentLevel(deepImpact));
+		float piercingBonus = deepImpact.apply(gunItem.getEnchantmentLevel(deepImpact), gunItem);
 		return original + piercingBonus;
 	}
 }

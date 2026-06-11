@@ -9,16 +9,15 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(AttachmentDataUtils.class)
+@Mixin(value = AttachmentDataUtils.class, remap = false)
 abstract class AttachmentDataUtilsMixin {
 	@ModifyReturnValue(
 			method = "getHeadshotMultiplier",
-			at = @At("TAIL"),
-			remap = false
+			at = @At("TAIL")
 	)
 	private static double applyEnchantmentHeadshotBonus(double original, ItemStack gunItem, GunData gunData) {
 		TACZEOEnchantment bullseye = TACZEOEnchantments.BULLSEYE.get();
-		float headshotBonus = bullseye.getHeadshotBonus(gunItem.getEnchantmentLevel(bullseye));
+		float headshotBonus = bullseye.apply(gunItem.getEnchantmentLevel(bullseye), gunItem);
 		return original + headshotBonus;
 	}
 }

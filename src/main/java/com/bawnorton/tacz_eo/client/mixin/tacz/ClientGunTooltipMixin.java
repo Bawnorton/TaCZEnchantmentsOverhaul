@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(ClientGunTooltip.class)
+@Mixin(value = ClientGunTooltip.class, remap = false)
 abstract class ClientGunTooltipMixin {
 	@Shadow
 	@Final
@@ -31,8 +31,7 @@ abstract class ClientGunTooltipMixin {
 
 	@Inject(
 			method = "getText",
-			at = @At("HEAD"),
-			remap = false
+			at = @At("HEAD")
 	)
 	private void loadEnchantmentLines(CallbackInfo ci) {
 		this.tacz_eo$enchantmentLines = new ArrayList<>();
@@ -44,8 +43,10 @@ abstract class ClientGunTooltipMixin {
 			at = @At(
 					value = "FIELD",
 					target = "Lcom/tacz/guns/item/GunTooltipPart;UPGRADES_TIP:Lcom/tacz/guns/item/GunTooltipPart;",
-					opcode = Opcodes.GETSTATIC
-			)
+					opcode = Opcodes.GETSTATIC,
+					remap = false
+			),
+			remap = true
 	)
 	private void appendEnchantmentTooltip(Font font, int pX, int pY, Matrix4f matrix4f, MultiBufferSource.BufferSource bufferSource, CallbackInfo ci, @Local(name = "yOffset") LocalIntRef yOffsetRef) {
 		if (tacz_eo$enchantmentLines.isEmpty()) return;
@@ -61,7 +62,8 @@ abstract class ClientGunTooltipMixin {
 
 	@ModifyReturnValue(
 			method = "getHeight",
-			at = @At("RETURN")
+			at = @At("RETURN"),
+			remap = true
 	)
 	private int addEnchantmentTooltipHeight(int originalHeight) {
 		return originalHeight + tacz_eo$enchantmentLines.size() * 10 + (tacz_eo$enchantmentLines.isEmpty() ? 0 : 4);

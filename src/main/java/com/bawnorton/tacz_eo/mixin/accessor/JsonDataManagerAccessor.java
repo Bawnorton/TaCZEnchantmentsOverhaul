@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Map;
 
-@Mixin(JsonDataManager.class)
+@Mixin(value = JsonDataManager.class, remap = false)
 public interface JsonDataManagerAccessor<T> {
 	@Invoker("prepare")
 	Map<ResourceLocation, JsonElement> tazc_eo$prepare(ResourceManager pResourceManager, ProfilerFiller pProfiler);

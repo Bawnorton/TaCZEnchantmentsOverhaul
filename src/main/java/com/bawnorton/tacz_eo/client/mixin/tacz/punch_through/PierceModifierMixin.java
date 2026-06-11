@@ -22,7 +22,7 @@ abstract class PierceModifierMixin {
 	)
 	private Integer applyEnchantmentPierceBonus(Integer original, ItemStack gunItem) {
 		TACZEOEnchantment punchThrough = TACZEOEnchantments.PUNCH_THROUGH.get();
-		int pierceBonus = punchThrough.getPierceBonus(gunItem.getEnchantmentLevel(punchThrough));
+		int pierceBonus = (int) punchThrough.apply(gunItem.getEnchantmentLevel(punchThrough), gunItem);
 		return original + pierceBonus;
 	}
 }

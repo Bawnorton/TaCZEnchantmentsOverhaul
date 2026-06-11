@@ -6,6 +6,7 @@ plugins {
   id("net.neoforged.moddev.legacyforge")
   id("tacz_eo.common")
   id("me.modmuss50.mod-publish-plugin")
+  id("dev.isxander.secrets")
 }
 
 repositories {
@@ -38,7 +39,7 @@ dependencies {
 
   modImplementation("curse.maven:tacz-durability-1065328:7389190")
 
-  modImplementation("curse.maven:tacz-additions-1356005:7085167")
+  modImplementation("maven.modrinth:shots-fired:1.20.1-0.2.4.1")
 
   implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3")!!)
   jarJar(implementation("io.github.llamalad7:mixinextras-forge:0.5.3")!!)
@@ -146,14 +147,20 @@ tasks {
   }
 }
 
+val isPublishing = gradle.startParameter.taskNames.any {
+  it.contains("publish", ignoreCase = true)
+}
+
 extensions.configure<PublishingExtension> {
   repositories {
     maven {
       name = "bawnorton"
       url = uri("https://maven.bawnorton.com/releases")
-      credentials(PasswordCredentials::class)
-      authentication {
-        create<BasicAuthentication>("basic")
+      if(isPublishing) {
+        credentials {
+          username = onePassword["op://Private/Maven API Key/username"].get()
+          password = onePassword["op://Private/Maven API Key/credential"].get()
+        }
       }
     }
   }
@@ -169,8 +176,8 @@ extensions.configure<PublishingExtension> {
 }
 
 publishMods {
-  val mrToken = providers.gradleProperty("MODRINTH_TOKEN")
-  val cfToken = providers.gradleProperty("CURSEFORGE_TOKEN")
+  val mrTokenProvider = onePassword["op://Private/Modrinth API Key/credential"]
+  val cfTokenProvider = onePassword["op://Private/Curseforge API Key/credential"]
 
   type = BETA
   file = tasks.named<Jar>("reobfJar").map { it.archiveFile.get() }
@@ -186,13 +193,15 @@ publishMods {
 
   modrinth {
     projectId = property("publishing.modrinth") as String
-    accessToken = mrToken
+    accessToken = mrTokenProvider
     minecraftVersions.addAll(compatibleVersions)
+    requires("timeless-and-classics-zero")
   }
 
   curseforge {
     projectId = property("publishing.curseforge") as String
-    accessToken = cfToken
+    accessToken = cfTokenProvider
     minecraftVersions.addAll(compatibleVersions)
+    requires("timeless-and-classics-zero")
   }
 }

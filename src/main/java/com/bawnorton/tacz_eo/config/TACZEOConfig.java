@@ -2,7 +2,6 @@ package com.bawnorton.tacz_eo.config;
 
 import com.bawnorton.tacz_eo.TACZEO;
 import com.bawnorton.tacz_eo.enchantment.TACZEOEnchantments;
-import com.tacz.guns.api.TimelessAPI;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
@@ -12,6 +11,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +92,7 @@ public class TACZEOConfig {
 
 	@SerialEntry(
 			value = "firepower_damage_multiplier",
-			comment = "The damage multiplier for the Firepower enchantment. This is multiplied by the enchantment level and added to the base damage of the bullets used.\nDefault: 10%"
+			comment = "The damage multiplier for the Firepower enchantment. This is multiplied by the enchantment level and applied to the base damage of the bullets used.\nDefault: 10%"
 	)
 	public float firepowerDamageMultiplier = 0.1f;
 
@@ -181,18 +181,86 @@ public class TACZEOConfig {
 	public int precisionEnchantabilitySpan = 25;
 
 	@SerialEntry(
-			value = "enchantments_map",
-			comment = "A map of enchantment ids to a list of gun ids that the enchantment can be applied to."
+			value = "capacity_multiplier",
+			comment = "The multiplier for how much additional ammo the Capacity enchantment grants. This is multiplied by the enchantment level and applied to the base capacity of the gun.\nDefault: 50%"
 	)
-	public Map<ResourceLocation, List<ResourceLocation>> enchantmentsMap = Util.make(new LinkedHashMap<>(), map -> {
-		List<ResourceLocation> guns = TimelessAPI.getAllCommonGunIndex().stream().map(Map.Entry::getKey).toList();
-		map.put(ForgeRegistries.ENCHANTMENTS.getKey(Enchantments.MOB_LOOTING), guns);
-		map.put(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.BULLSEYE.get()), guns);
-		map.put(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.DEEP_IMPACT.get()), guns);
-		map.put(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.FIREPOWER.get()), guns);
-		map.put(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.PRECISION.get()), guns);
-		map.put(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.PUNCH_THROUGH.get()), guns);
+	public float capacityMultiplier = 0.5f;
+
+	@SerialEntry(
+			value = "capacity_max_level",
+			comment = "The maximum level for the Capacity enchantment.\nDefault: 4"
+	)
+	public int capacityMaxLevel = 4;
+
+	@SerialEntry(
+			value = "capacity_base_enchantability",
+			comment = "The minimum enchantability required to obtain the first level of the enchantment.\nDefault: 2"
+	)
+	public int capacityBaseEnchantability = 2;
+
+	@SerialEntry(
+			value = "capacity_level_enchantability",
+			comment = "The additional enchantability required for each subsequent level of the enchantment.\nDefault: 10"
+	)
+	public int capacityLevelEnchantability = 10;
+
+	@SerialEntry(
+			value = "capacity_enchantability_span",
+			comment = "When added to the base and level enchantability, this value determines the maximum enchantability where the enchantment can be obtained.\nDefault: 15"
+	)
+	public int capacityEnchantabilitySpan = 15;
+
+	@SerialEntry(
+			value = "bullet_retention_chance",
+			comment = "The chance that a bullet is not consumed when fired per level of enchant.\nDefault: 10%"
+	)
+	public float bulletRetentionChance = 0.1f;
+
+	@SerialEntry(
+			value = "bullet_retention_max_level",
+			comment = "The maximum level for the Bullet Retention enchantment.\nDefault: 2"
+	)
+	public int bulletRetentionMaxLevel = 2;
+
+	@SerialEntry(
+			value = "bullet_retention_base_enchantability",
+			comment = "The minimum enchantability required to obtain the first level of the enchantment.\nDefault: 21"
+	)
+	public int bulletRetentionBaseEnchantability = 21;
+
+	@SerialEntry(
+			value = "bullet_retention_level_enchantability",
+			comment = "The additional enchantability required for each subsequent level of the enchantment.\nDefault: 17"
+	)
+	public int bulletRetentionLevelEnchantability = 17;
+
+	@SerialEntry(
+			value = "bullet_retention_enchantability_span",
+			comment = "When added to the base and level enchantability, this value determines the maximum enchantability where the enchantment can be obtained.\nDefault: 45"
+	)
+	public int bulletRetentionEnchantabilitySpan = 45;
+
+	@SerialEntry(
+			value = "enchantments_list",
+			comment = "A list of the enchantments that all guns can accept. This is checked before the blacklist"
+	)
+	public List<ResourceLocation> enchantmentsList = Util.make(new ArrayList<>(), list -> {
+		list.add(ForgeRegistries.ENCHANTMENTS.getKey(Enchantments.MOB_LOOTING));
+		list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.BULLSEYE.get()));
+		list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.DEEP_IMPACT.get()));
+		list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.FIREPOWER.get()));
+		list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.PRECISION.get()));
+		list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.PUNCH_THROUGH.get()));
+		list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.CAPACITY.get()));
+		list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.BULLET_RETENTION.get()));
 	});
+
+	@SerialEntry(
+			value = "enchantments_blacklist",
+			comment = "A map of enchantment ids to a list of gun ids that the enchantment cannot be applied to.\nEmpty by default, meaning all enchantments can be applied to all guns."
+	)
+	public Map<ResourceLocation, List<ResourceLocation>> enchantmentsBlacklist = Util.make(new LinkedHashMap<>(), map
+			-> enchantmentsList.forEach(location -> map.put(location, new ArrayList<>())));
 
 	public static void init() {
 		if (initialized) return;

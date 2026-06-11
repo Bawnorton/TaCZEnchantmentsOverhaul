@@ -34,6 +34,7 @@ public class TACZEOMixinConfigPlugin implements IMixinConfigPlugin {
 		return switch (mixinClassName) {
 			case "com.bawnorton.tacz_eo.mixin.tacz_durability.ModernKineticGunItemMixinSquared" -> isModLoaded("gundb");
 			case "com.bawnorton.tacz_eo.mixin.tacz_tweaks.BulletInteractionManagerMixin" -> isModLoaded("tacztweaks");
+			case "com.bawnorton.tacz_eo.mixin.shotsfired.ModEventsMixin" -> isModLoaded("shotsfired");
 			default -> true;
 		};
 	}

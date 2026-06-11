@@ -18,13 +18,13 @@ public class TACZEOEventHandler {
 
 	private static void applyFirepower(EntityHurtByGunEvent.Pre event, ItemStack gun) {
 		TACZEOEnchantment firepower = TACZEOEnchantments.FIREPOWER.get();
-		float damageBonus =  firepower.getGunDamageBonus(gun.getEnchantmentLevel(firepower), gun);
+		float damageBonus =  firepower.apply(gun.getEnchantmentLevel(firepower), gun);
 		event.setBaseAmount(event.getBaseAmount() + damageBonus);
 	}
 
 	private static void applyBullseye(EntityHurtByGunEvent.Pre event, ItemStack gun) {
 		TACZEOEnchantment bullseye = TACZEOEnchantments.BULLSEYE.get();
-		float headshotBonus = bullseye.getHeadshotBonus(gun.getEnchantmentLevel(bullseye));
+		float headshotBonus = bullseye.apply(gun.getEnchantmentLevel(bullseye), gun);
 		event.setHeadshotMultiplier(event.getHeadshotMultiplier() + headshotBonus);
 	}
 }

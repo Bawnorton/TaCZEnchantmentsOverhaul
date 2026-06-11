@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Map;
 
-@Mixin(CommonDataManager.class)
+@Mixin(value = CommonDataManager.class, remap = false)
 public interface CommonDataManagerAccessor {
 	@Invoker("apply")
 	void tacz_eo$apply(Map<ResourceLocation, JsonElement> pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler);

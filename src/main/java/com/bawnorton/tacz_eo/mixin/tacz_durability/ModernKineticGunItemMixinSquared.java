@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(value = ModernKineticGunItem.class, priority = 1500)
+@Mixin(value = ModernKineticGunItem.class, priority = 1500, remap = false)
 abstract class ModernKineticGunItemMixinSquared extends AbstractGunItem {
 	protected ModernKineticGunItemMixinSquared(Properties pProperties) {
 		super(pProperties);
@@ -26,7 +26,8 @@ abstract class ModernKineticGunItemMixinSquared extends AbstractGunItem {
 			method = "@MixinSquared:Handler",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/world/item/enchantment/EnchantmentCategory;canEnchant(Lnet/minecraft/world/item/Item;)Z"
+					target = "Lnet/minecraft/world/item/enchantment/EnchantmentCategory;canEnchant(Lnet/minecraft/world/item/Item;)Z",
+					remap = true
 			)
 	)
 	private boolean forwardToTACZEO(boolean original, ItemStack stack, Enchantment enchantment) {

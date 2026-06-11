@@ -1,31 +1,22 @@
 package com.bawnorton.tacz_eo.enchantment;
 
 import com.bawnorton.tacz_eo.config.TACZEOConfig;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 public class PrecisionEnchantment extends TACZEOEnchantment {
-	public PrecisionEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot slot) {
-		super(rarity, category, new EquipmentSlot[]{slot});
+	public PrecisionEnchantment(Rarity rarity) {
+		super(rarity,
+				() -> TACZEOConfig.get().precisionBaseEnchantability,
+				() -> TACZEOConfig.get().precisionLevelEnchantability,
+				() -> TACZEOConfig.get().precisionMaxLevel,
+				() -> TACZEOConfig.get().precisionEnchantabilitySpan
+		);
 	}
 
 	@Override
-	public int getMinCost(int level) {
-		return TACZEOConfig.get().precisionBaseEnchantability + (level - 1) * TACZEOConfig.get().precisionLevelEnchantability;
-	}
-
-	@Override
-	public int getMaxCost(int level) {
-		return this.getMinCost(level) + TACZEOConfig.get().precisionEnchantabilitySpan;
-	}
-
-	public int getMaxLevel() {
-		return TACZEOConfig.get().precisionMaxLevel;
-	}
-
-	@Override
-	public float getAccuracyBonus(int level) {
+	public float apply(int level, @Nullable ItemStack enchantedItem) {
 		return TACZEOConfig.get().precisionAccuracyBonus * level;
 	}
 }

@@ -21,15 +21,14 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Map;
 
-@Mixin(CommonAssetsManager.class)
+@Mixin(value = CommonAssetsManager.class, remap = false)
 abstract class CommonAssetsManagerMixin {
 	@Definition(id = "register", method = "Lcom/tacz/guns/resource/CommonAssetsManager;register(Lcom/tacz/guns/resource/manager/INetworkCacheReloadListener;)Lcom/tacz/guns/resource/manager/INetworkCacheReloadListener;")
 	@Definition(id = "GUN_INDEX", field = "Lcom/tacz/guns/resource/network/DataType;GUN_INDEX:Lcom/tacz/guns/resource/network/DataType;")
 	@Expression("?.register(@(new ?(GUN_INDEX, ?, ?, ?, ?)))")
 	@ModifyExpressionValue(
 			method = "reloadAndRegister",
-			at = @At("MIXINEXTRAS:EXPRESSION"),
-			remap = false
+			at = @At("MIXINEXTRAS:EXPRESSION")
 	)
 	private <T> CommonDataManager<T> attachConfigLoader(CommonDataManager<T> original) {
 		return new CommonDataManager<>(original.getType(), original.getDataClass(), original.getGson(), "index/guns", original.getMarker().getName()) {

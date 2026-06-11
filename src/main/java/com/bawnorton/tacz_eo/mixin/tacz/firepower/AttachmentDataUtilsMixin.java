@@ -9,16 +9,15 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(AttachmentDataUtils.class)
+@Mixin(value = AttachmentDataUtils.class, remap = false)
 abstract class AttachmentDataUtilsMixin {
 	@ModifyReturnValue(
 			method = "getDamageWithAttachment",
-			at = @At("TAIL"),
-			remap = false
+			at = @At("TAIL")
 	)
 	private static double applyEnchantmentDamageBonus(double original, ItemStack gunItem, GunData gunData) {
 		TACZEOEnchantment firepower = TACZEOEnchantments.FIREPOWER.get();
-		float damageBonus = firepower.getGunDamageBonus(gunItem.getEnchantmentLevel(firepower), gunItem);
+		float damageBonus = firepower.apply(gunItem.getEnchantmentLevel(firepower), gunItem);
 		return original + damageBonus;
 	}
 }

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(ModernKineticGunScriptAPI.class)
+@Mixin(value = ModernKineticGunScriptAPI.class, remap = false)
 abstract class ModernKineticGunScriptAPIMixin {
 	@Shadow
 	private ItemStack itemStack;
@@ -22,13 +22,12 @@ abstract class ModernKineticGunScriptAPIMixin {
 	@Expression("inaccuracy = @(?)")
 	@ModifyExpressionValue(
 			method = "shootOnce",
-			at = @At("MIXINEXTRAS:EXPRESSION"),
-			remap = false
+			at = @At("MIXINEXTRAS:EXPRESSION")
 	)
-	private float applyEnchantmentAccuracyBonus(float original, @Local(name = "inaccuracyType") InaccuracyType type) {
+	private float applyEnchantmentAccuracyBonus(float original, @Local(name = "inaccuracyType") InaccuracyType inaccuracyType) {
 		TACZEOEnchantment precision = TACZEOEnchantments.PRECISION.get();
-		float accuracyBonus = precision.getAccuracyBonus(itemStack.getEnchantmentLevel(precision));
-		if(type == InaccuracyType.AIM) {
+		float accuracyBonus = precision.apply(itemStack.getEnchantmentLevel(precision), itemStack);
+		if(inaccuracyType == InaccuracyType.AIM) {
 			return original - accuracyBonus;
 		} else {
 			return original - (accuracyBonus * original);

@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(EntityKineticBullet.class)
+@Mixin(value = EntityKineticBullet.class, remap = false)
 abstract class EntityKineticBulletMixin {
 	@Definition(id = "pierce", field = "Lcom/tacz/guns/entity/EntityKineticBullet;pierce:I")
 	@Expression("?.pierce = @(?)")
@@ -21,7 +21,7 @@ abstract class EntityKineticBulletMixin {
 	)
 	private int applyEnchantmentPierceBonus(int original, @Local(argsOnly = true) ItemStack gunItem) {
 		TACZEOEnchantment punchThrough = TACZEOEnchantments.PUNCH_THROUGH.get();
-		int pierceBonus = punchThrough.getPierceBonus(gunItem.getEnchantmentLevel(punchThrough));
+		int pierceBonus = (int) punchThrough.apply(gunItem.getEnchantmentLevel(punchThrough), gunItem);
 		return original + pierceBonus;
 	}
 }

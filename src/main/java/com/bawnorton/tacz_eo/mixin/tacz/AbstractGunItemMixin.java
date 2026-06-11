@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(AbstractGunItem.class)
+@Mixin(value = AbstractGunItem.class, remap = false)
 abstract class AbstractGunItemMixin extends ItemMixin implements IForgeItem, IGun {
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {

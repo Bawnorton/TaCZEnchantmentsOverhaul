@@ -1,9 +1,8 @@
-package com.bawnorton.tacz_eo.mixin.tacz.deep_impact;
+package com.bawnorton.tacz_eo.mixin.tacz.capacity;
 
 import com.bawnorton.tacz_eo.enchantment.TACZEOEnchantment;
 import com.bawnorton.tacz_eo.enchantment.TACZEOEnchantments;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.tacz.guns.resource.pojo.data.gun.GunData;
 import com.tacz.guns.util.AttachmentDataUtils;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,12 +11,12 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = AttachmentDataUtils.class, remap = false)
 abstract class AttachmentDataUtilsMixin {
 	@ModifyReturnValue(
-			method = "getArmorIgnoreWithAttachment",
-			at = @At("TAIL")
+			method = "getAmmoCountWithAttachment",
+			at = @At("RETURN")
 	)
-	private static double applyEnchantmentArmourPierceBonus(double original, ItemStack gunItem, GunData gunData) {
-		TACZEOEnchantment deepImpact = TACZEOEnchantments.DEEP_IMPACT.get();
-		float piercingBonus = deepImpact.apply(gunItem.getEnchantmentLevel(deepImpact), gunItem);
-		return original + piercingBonus;
+	private static int applyEnchantmentCapacity(int original, ItemStack gunItem) {
+		TACZEOEnchantment capacity = TACZEOEnchantments.CAPACITY.get();
+		int additionalAmmoCapacity = Math.round(capacity.apply(gunItem.getEnchantmentLevel(capacity), gunItem));
+		return original + additionalAmmoCapacity;
 	}
 }
