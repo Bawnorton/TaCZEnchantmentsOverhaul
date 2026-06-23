@@ -16,7 +16,6 @@ abstract class AttachmentDataUtilsMixin {
 	)
 	private static int applyEnchantmentCapacity(int original, ItemStack gunItem) {
 		TACZEOEnchantment capacity = TACZEOEnchantments.CAPACITY.get();
-		int additionalAmmoCapacity = Math.round(capacity.apply(gunItem.getEnchantmentLevel(capacity), gunItem));
-		return original + additionalAmmoCapacity;
+		return Math.round(capacity.apply(original, gunItem.getEnchantmentLevel(capacity), gunItem));
 	}
 }

@@ -31,6 +31,8 @@ val loader: String by project
 base.archivesName = "${mod("id")}-${mod("version")}+$minecraft-$loader"
 
 dependencies {
+
+
   modImplementation("curse.maven:timeless-and-classic-zero-1028108:7401617-sources-7401617")
   modImplementation("dev.isxander:yet-another-config-lib:3.6.1+1.20.1-forge")
 
@@ -39,7 +41,7 @@ dependencies {
 
   modImplementation("curse.maven:tacz-durability-1065328:7389190")
 
-  modImplementation("maven.modrinth:shots-fired:1.20.1-0.2.4.1")
+  modCompileOnly("maven.modrinth:shots-fired:1.20.1-0.2.4.1")
 
   implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3")!!)
   jarJar(implementation("io.github.llamalad7:mixinextras-forge:0.5.3")!!)

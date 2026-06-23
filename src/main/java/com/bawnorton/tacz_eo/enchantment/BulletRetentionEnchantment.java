@@ -19,7 +19,7 @@ public class BulletRetentionEnchantment extends TACZEOEnchantment {
     }
 
     @Override
-    public float apply(int level, @Nullable ItemStack enchantedItem) {
+    public float apply(float original, int level, @Nullable ItemStack enchantedItem) {
         return Mth.clamp(1 - TACZEOConfig.get().bulletRetentionChance * level, 0, 1);
     }
 

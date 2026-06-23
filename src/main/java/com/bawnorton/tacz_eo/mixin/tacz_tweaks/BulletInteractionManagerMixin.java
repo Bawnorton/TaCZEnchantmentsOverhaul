@@ -28,9 +28,8 @@ abstract class BulletInteractionManagerMixin {
 			if(owner instanceof LivingEntity living) {
 				ItemStack held = living.getMainHandItem();
 				TACZEOEnchantment punchThrough = TACZEOEnchantments.PUNCH_THROUGH.get();
-				pierce += (int) punchThrough.apply(held.getEnchantmentLevel(punchThrough), null);
 				return new BulletInteraction.Pierce.Count(
-						pierce,
+						(int) punchThrough.apply(pierce, held.getEnchantmentLevel(punchThrough), null),
 						count.getConditional(),
 						count.getDamageFalloff(),
 						count.getDamageMultiplier(),

@@ -17,7 +17,6 @@ abstract class AttachmentDataUtilsMixin {
 	)
 	private static double applyEnchantmentArmourPierceBonus(double original, ItemStack gunItem, GunData gunData) {
 		TACZEOEnchantment deepImpact = TACZEOEnchantments.DEEP_IMPACT.get();
-		float piercingBonus = deepImpact.apply(gunItem.getEnchantmentLevel(deepImpact), gunItem);
-		return original + piercingBonus;
+		return deepImpact.apply((float) original, gunItem.getEnchantmentLevel(deepImpact), gunItem);
 	}
 }

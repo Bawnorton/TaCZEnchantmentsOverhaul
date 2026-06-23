@@ -16,7 +16,7 @@ public class PrecisionEnchantment extends TACZEOEnchantment {
 	}
 
 	@Override
-	public float apply(int level, @Nullable ItemStack enchantedItem) {
+	public float apply(float original, int level, @Nullable ItemStack enchantedItem) {
 		return TACZEOConfig.get().precisionAccuracyBonus * level;
 	}
 }

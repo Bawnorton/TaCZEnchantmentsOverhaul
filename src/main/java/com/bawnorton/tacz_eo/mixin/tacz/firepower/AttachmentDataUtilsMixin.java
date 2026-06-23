@@ -17,7 +17,6 @@ abstract class AttachmentDataUtilsMixin {
 	)
 	private static double applyEnchantmentDamageBonus(double original, ItemStack gunItem, GunData gunData) {
 		TACZEOEnchantment firepower = TACZEOEnchantments.FIREPOWER.get();
-		float damageBonus = firepower.apply(gunItem.getEnchantmentLevel(firepower), gunItem);
-		return original + damageBonus;
+		return firepower.apply((float) original, gunItem.getEnchantmentLevel(firepower), gunItem);
 	}
 }

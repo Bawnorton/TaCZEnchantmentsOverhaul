@@ -30,7 +30,7 @@ abstract class ModernKineticGunScriptAPIMixin {
 			return;
 		}
 
-        float chance = bulletRetention.apply(itemStack.getEnchantmentLevel(bulletRetention), itemStack);
+        float chance = bulletRetention.apply(0, itemStack.getEnchantmentLevel(bulletRetention), itemStack);
         consumeAmmo = Math.random() <= chance;
         bulletRetention.setAmmoWillBeConsumed(consumeAmmo);
         original.call(consumeAmmo);

@@ -17,7 +17,6 @@ abstract class AttachmentDataUtilsMixin {
 	)
 	private static double applyEnchantmentHeadshotBonus(double original, ItemStack gunItem, GunData gunData) {
 		TACZEOEnchantment bullseye = TACZEOEnchantments.BULLSEYE.get();
-		float headshotBonus = bullseye.apply(gunItem.getEnchantmentLevel(bullseye), gunItem);
-		return original + headshotBonus;
+		return bullseye.apply((float) original, gunItem.getEnchantmentLevel(bullseye), gunItem);
 	}
 }

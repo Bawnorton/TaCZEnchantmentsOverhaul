@@ -36,7 +36,7 @@ public abstract class TACZEOEnchantment extends Enchantment {
 		return maxLevel.get();
 	}
 
-	public float apply(int level, @Nullable ItemStack enchantedItem) {
+	public float apply(float original, int level, @Nullable ItemStack enchantedItem) {
 		return 0;
 	}
 }

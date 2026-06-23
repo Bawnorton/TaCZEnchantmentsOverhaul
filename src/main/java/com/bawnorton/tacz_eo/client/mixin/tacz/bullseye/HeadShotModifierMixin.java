@@ -22,7 +22,6 @@ abstract class HeadShotModifierMixin {
 	)
 	private Float applyEnchantmentHeadshotBonus(Float original, ItemStack gunItem) {
 		TACZEOEnchantment bullseye = TACZEOEnchantments.BULLSEYE.get();
-		float headshotBonus = bullseye.apply(gunItem.getEnchantmentLevel(bullseye), gunItem);
-		return original + headshotBonus;
+		return bullseye.apply(original, gunItem.getEnchantmentLevel(bullseye), gunItem);
 	}
 }

@@ -16,7 +16,7 @@ public class DeepImpactEnchantment extends TACZEOEnchantment {
 	}
 
 	@Override
-	public float apply(int level, @Nullable ItemStack enchantedItem) {
-		return TACZEOConfig.get().deepImpactArmourPiercingBonus * level;
+	public float apply(float original, int level, @Nullable ItemStack enchantedItem) {
+		return original + TACZEOConfig.get().deepImpactArmourPiercingBonus * level;
 	}
 }

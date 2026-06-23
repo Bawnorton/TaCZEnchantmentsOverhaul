@@ -47,8 +47,7 @@ abstract class InaccuracyModifierMixin {
 	private Float applyEnchantmentAccuracyBonus(Float original) {
 		ItemStack gunItem = tacz_eo$gunItemCapture.get();
 		TACZEOEnchantment precision = TACZEOEnchantments.PRECISION.get();
-		float accuracyBonus = precision.apply(gunItem.getEnchantmentLevel(precision), gunItem);
-		return original - accuracyBonus;
+		return original - precision.apply(original, gunItem.getEnchantmentLevel(precision), gunItem);
 	}
 
 	@Definition(id = "get", method = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;")
@@ -62,7 +61,6 @@ abstract class InaccuracyModifierMixin {
 	private Float applyEnchantmentAccuracyBonusMultiplicative(Float original) {
 		ItemStack gunItem = tacz_eo$gunItemCapture.get();
 		TACZEOEnchantment precision = TACZEOEnchantments.PRECISION.get();
-		float accuracyBonus = precision.apply(gunItem.getEnchantmentLevel(precision), gunItem);
-		return original - (accuracyBonus * original);
+		return original - (precision.apply(original, gunItem.getEnchantmentLevel(precision), gunItem) * original);
 	}
 }

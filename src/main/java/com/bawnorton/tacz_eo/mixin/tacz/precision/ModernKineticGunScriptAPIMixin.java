@@ -26,7 +26,7 @@ abstract class ModernKineticGunScriptAPIMixin {
 	)
 	private float applyEnchantmentAccuracyBonus(float original, @Local(name = "inaccuracyType") InaccuracyType inaccuracyType) {
 		TACZEOEnchantment precision = TACZEOEnchantments.PRECISION.get();
-		float accuracyBonus = precision.apply(itemStack.getEnchantmentLevel(precision), itemStack);
+		float accuracyBonus = precision.apply(original, itemStack.getEnchantmentLevel(precision), itemStack);
 		if(inaccuracyType == InaccuracyType.AIM) {
 			return original - accuracyBonus;
 		} else {

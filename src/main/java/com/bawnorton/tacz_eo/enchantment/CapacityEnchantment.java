@@ -22,7 +22,7 @@ public class CapacityEnchantment extends TACZEOEnchantment {
     }
 
     @Override
-    public float apply(int level, @Nullable ItemStack enchantedItem) {
+    public float apply(float original, int level, @Nullable ItemStack enchantedItem) {
         if(enchantedItem != null && enchantedItem.getItem() instanceof IGun gun) {
             Optional<CommonGunIndex> commonGunIndex = TimelessAPI.getCommonGunIndex(gun.getGunId(enchantedItem));
             if(commonGunIndex.isPresent()) {
@@ -30,9 +30,9 @@ public class CapacityEnchantment extends TACZEOEnchantment {
                 GunData gunData = gunIndex.getGunData();
                 int extraBullet = gunData.getBolt() != Bolt.OPEN_BOLT ? 1 : 0;
                 int ammoAmount = gunData.getAmmoAmount() + extraBullet;
-                return ammoAmount * (TACZEOConfig.get().capacityMultiplier * level);
+                return original + ammoAmount * (TACZEOConfig.get().capacityMultiplier * level);
             }
         }
-        return super.apply(level, enchantedItem);
+        return super.apply(original, level, enchantedItem);
     }
 }

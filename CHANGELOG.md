@@ -1,3 +1,8 @@
+# 1.2.0
+
+- Rework how enchantments calculate their values
+- Fix bug w/ firepower using incorrect base values
+
 # 1.1.0
 
 - Added new enchantments

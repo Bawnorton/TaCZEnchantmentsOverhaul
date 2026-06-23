@@ -21,7 +21,6 @@ abstract class EntityKineticBulletMixin {
 	)
 	private int applyEnchantmentPierceBonus(int original, @Local(argsOnly = true) ItemStack gunItem) {
 		TACZEOEnchantment punchThrough = TACZEOEnchantments.PUNCH_THROUGH.get();
-		int pierceBonus = (int) punchThrough.apply(gunItem.getEnchantmentLevel(punchThrough), gunItem);
-		return original + pierceBonus;
+		return (int) punchThrough.apply(original, gunItem.getEnchantmentLevel(punchThrough), gunItem);
 	}
 }

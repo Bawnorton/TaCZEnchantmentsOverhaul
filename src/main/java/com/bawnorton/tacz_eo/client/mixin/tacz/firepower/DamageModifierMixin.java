@@ -23,7 +23,6 @@ abstract class DamageModifierMixin {
 	)
 	private float applyEnchantmentDamageBonus(float original, ItemStack gunItem) {
 		TACZEOEnchantment firepower = TACZEOEnchantments.FIREPOWER.get();
-		float damageBonus = firepower.apply(gunItem.getEnchantmentLevel(firepower), gunItem);
-		return original + damageBonus;
+		return firepower.apply(original, gunItem.getEnchantmentLevel(firepower), gunItem);
 	}
 }

@@ -16,7 +16,7 @@ public class PunchThroughEnchantment extends TACZEOEnchantment {
 	}
 
 	@Override
-	public float apply(int level, @Nullable ItemStack enchantedItem) {
-		return TACZEOConfig.get().punchThroughCount * level;
+	public float apply(float original, int level, @Nullable ItemStack enchantedItem) {
+		return original + TACZEOConfig.get().punchThroughCount * level;
 	}
 }

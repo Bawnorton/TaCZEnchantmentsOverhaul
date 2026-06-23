@@ -20,15 +20,7 @@ public class FirepowerEnchantment extends TACZEOEnchantment {
 	}
 
 	@Override
-	public float apply(int level, @Nullable ItemStack enchantedItem) {
-		if(enchantedItem != null && enchantedItem.getItem() instanceof IGun gun) {
-			Optional<CommonGunIndex> commonGunIndex = TimelessAPI.getCommonGunIndex(gun.getGunId(enchantedItem));
-			if(commonGunIndex.isPresent()) {
-				return commonGunIndex.orElseThrow()
-						.getBulletData()
-						.getDamageAmount() * (TACZEOConfig.get().firepowerDamageMultiplier * level);
-			}
-		}
-		return super.apply(level, enchantedItem);
+	public float apply(float original, int level, @Nullable ItemStack enchantedItem) {
+		return original + original * (TACZEOConfig.get().firepowerDamageMultiplier * level);
 	}
 }
