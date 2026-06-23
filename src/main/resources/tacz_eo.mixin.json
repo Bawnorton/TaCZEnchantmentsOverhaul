@@ -13,7 +13,6 @@
     "shotsfired.ModEventsMixin",
     "tacz.AbstractGunItemMixin",
     "tacz.CommonAssetsManagerMixin",
-    "tacz.EntityKineticBulletMixin",
     "tacz.ItemMixin",
     "tacz.bullet_retention.ModernKineticGunScriptAPIMixin",
     "tacz.bullseye.AttachmentDataUtilsMixin",
