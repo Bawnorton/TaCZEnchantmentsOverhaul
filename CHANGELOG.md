@@ -1,3 +1,7 @@
+# 1.2.1
+
+- Update to TACZ 1.2.0
+
 # 1.2.0
 
 - Rework how enchantments calculate their values

@@ -8,8 +8,6 @@
   },
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "accessor.CommonDataManagerAccessor",
-    "accessor.JsonDataManagerAccessor",
     "shotsfired.ModEventsMixin",
     "tacz.AbstractGunItemMixin",
     "tacz.CommonAssetsManagerMixin",

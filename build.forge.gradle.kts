@@ -31,15 +31,13 @@ val loader: String by project
 base.archivesName = "${mod("id")}-${mod("version")}+$minecraft-$loader"
 
 dependencies {
-
-
-  modImplementation("curse.maven:timeless-and-classic-zero-1028108:7401617-sources-7401617")
+  modImplementation("curse.maven:timeless-and-classic-zero-1028108:9454481-sources-9454481")
   modImplementation("dev.isxander:yet-another-config-lib:3.6.1+1.20.1-forge")
 
-  modImplementation("maven.modrinth:tacz-tweaks:2.12.2")
+  modCompileOnly("maven.modrinth:tacz-tweaks:2.12.2")
   modRuntimeOnly("thedarkcolour:kotlinforforge:4.11.0")
 
-  modImplementation("curse.maven:tacz-durability-1065328:7389190")
+  modCompileOnly("curse.maven:tacz-durability-1065328:7389190")
 
   modCompileOnly("maven.modrinth:shots-fired:1.20.1-0.2.4.1")
 
