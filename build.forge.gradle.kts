@@ -202,6 +202,8 @@ publishMods {
     projectId = property("publishing.curseforge") as String
     accessToken = cfTokenProvider
     minecraftVersions.addAll(compatibleVersions)
+    server.set(true)
+    client.set(true)
     requires("timeless-and-classics-zero")
   }
 }
