@@ -1,20 +1,23 @@
 plugins {
-  kotlin("jvm") version "2.3.0" apply false
-  id("dev.kikugie.stonecutter")
-  id("net.neoforged.moddev.legacyforge") version "2.0.91" apply false
-  id("me.modmuss50.mod-publish-plugin") version "2.1.1" apply false
-  id("dev.isxander.secrets") version "0.1.0" apply false
+    id("net.neoforged.moddev") version "2.0.148" apply false
+    id("net.neoforged.moddev.legacyforge") version "2.0.148" apply false
+    id("me.modmuss50.mod-publish-plugin") version "2.1.1" apply false
+    id("dev.isxander.secrets") version "0.1.0" apply false
 }
 
-stonecutter active "1.20.1-forge"
+stonecutter active "1.21.1-neoforge"
 
-stonecutter tasks {
-  order("publishModrinth")
-  order("publishCurseforge")
-}
+stonecutter parameters {
+    val (version, loader) = current.project.split('-', limit = 2)
 
+    properties {
+        tags(version, loader)
+    }
 
-for (version in stonecutter.versions.map { it.version }.distinct()) tasks.register("publish$version") {
-  group = "publishing"
-  dependsOn(stonecutter.tasks.named("publishMods") { metadata.version == version })
+    constants {
+        match(loader, "neoforge", "forge")
+    }
+
+    swaps["mod_version"] = "\"${properties["mod.version"]}\";"
+    swaps["minecraft"] = "\"${current.version}\";"
 }

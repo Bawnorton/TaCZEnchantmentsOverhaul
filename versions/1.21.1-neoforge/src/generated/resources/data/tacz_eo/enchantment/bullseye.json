@@ -1,0 +1,37 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.tacz_eo.bullseye"
+  },
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:multiply",
+          "factor": {
+            "type": "minecraft:linear",
+            "base": 1.5,
+            "per_level_above_first": 0.5
+          }
+        },
+        "requirements": {
+          "condition": "tacz_eo:headshot"
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 15
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 35,
+    "per_level_above_first": 15
+  },
+  "slots": [
+    "hand"
+  ],
+  "supported_items": "tacz:modern_kinetic_gun",
+  "weight": 2
+}

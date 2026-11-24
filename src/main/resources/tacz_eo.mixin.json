@@ -1,30 +1,12 @@
 {
-  "package": "com.bawnorton.tacz_eo.mixin",
+  "package": "com.bawnorton.tacz_eo.mixin.injectors",
   "required": true,
   "minVersion": "0.8",
-  "plugin": "com.bawnorton.tacz_eo.mixin.TACZEOMixinConfigPlugin",
+  "plugin": "com.bawnorton.tacz_eo.mixin.plugin.TACZEOMixinConfigPlugin",
   "injectors": {
     "defaultRequire": 1
   },
-  "compatibilityLevel": "JAVA_17",
-  "mixins": [
-    "shotsfired.ModEventsMixin",
-    "tacz.AbstractGunItemMixin",
-    "tacz.CommonAssetsManagerMixin",
-    "tacz.ItemMixin",
-    "tacz.bullet_retention.ModernKineticGunScriptAPIMixin",
-    "tacz.bullseye.AttachmentDataUtilsMixin",
-    "tacz.bullseye.EntityKineticBulletMixin",
-    "tacz.capacity.AttachmentDataUtilsMixin",
-    "tacz.deep_impact.AttachmentDataUtilsMixin",
-    "tacz.deep_impact.EntityKineticBulletMixin",
-    "tacz.firepower.AttachmentDataUtilsMixin",
-    "tacz.firepower.EntityKineticBulletMixin",
-    "tacz.precision.ModernKineticGunScriptAPIMixin",
-    "tacz.punch_through.EntityKineticBulletMixin",
-    "tacz_durability.ModernKineticGunItemMixinSquared",
-    "tacz_tweaks.BulletInteractionManagerMixin"
-  ],
+  "compatibilityLevel": "${java}",
   "mixinextras": {
     "minVersion": "0.5.0"
   },

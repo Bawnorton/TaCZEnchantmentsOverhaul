@@ -1,3 +1,8 @@
+# 1.3.0
+
+- Port to NeoForge 1.21.1
+- Rework internal mod structure
+
 # 1.2.1
 
 - Update to TACZ 1.2.0
@@ -10,9 +15,9 @@
 # 1.1.0
 
 - Added new enchantments
-  - Capacity - Increases magazine capacity
-  - Bullet Retention - Chance to not consume bullets when firing weapons.
-    - Compatible with shots fired
+    - Capacity - Increases magazine capacity
+    - Bullet Retention - Chance to not consume bullets when firing weapons.
+        - Compatible with shots fired
 - Added enchantment descriptions
 - Replaced gun whitelist with enchantment whitelist and gun blacklist
 - Fix firepower not respecting enchantment span config value

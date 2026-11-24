@@ -1,0 +1,34 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.tacz_eo.bullet_retention"
+  },
+  "effects": {
+    "minecraft:ammo_use": [
+      {
+        "effect": {
+          "type": "minecraft:remove_binomial",
+          "chance": {
+            "type": "minecraft:linear",
+            "base": 0.1,
+            "per_level_above_first": 0.1
+          }
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 45,
+    "per_level_above_first": 17
+  },
+  "max_level": 2,
+  "min_cost": {
+    "base": 21,
+    "per_level_above_first": 17
+  },
+  "slots": [
+    "hand"
+  ],
+  "supported_items": "tacz:modern_kinetic_gun",
+  "weight": 2
+}

@@ -5,27 +5,39 @@ import com.bawnorton.tacz_eo.enchantment.TACZEOEnchantments;
 import com.tacz.guns.api.TimelessAPI;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.DropdownStringControllerBuilder;
-import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import net.minecraft.Util;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+
+//? if >=1.21.1 {
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.enchantment.Enchantment;
+//?} else {
+/*import net.neoforged.registries.ForgeRegistries;
+import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+*///?}
 
 public class TACZEOConfigScreenHandler {
 
     public static Screen generateConfigScreen(Screen screen) {
         return YetAnotherConfigLib.createBuilder()
                 .title(Component.translatable("config.tacz_eo.title"))
-                .category(ConfigCategory.createBuilder()
+                //? if <=1.20.1 {
+                /*.category(ConfigCategory.createBuilder()
                         .name(Component.translatable("config.tacz_eo.category.enchantment_balancing"))
                         .tooltip(Component.translatable("config.tacz_eo.category.enchantment_balancing.tooltip"))
                         .group(OptionGroup.createBuilder()
@@ -155,13 +167,15 @@ public class TACZEOConfigScreenHandler {
                                 .collapsed(true)
                                 .build())
                         .build())
+                *///?}
                 .category(buildEnchantmentAllowCategory())
                 .save(TACZEOConfig::save)
                 .build()
                 .generateScreen(screen);
     }
 
-    private static Collection<Option<Integer>> buildEnchantmentSettings(
+    //? if <=1.20.1 {
+    /*private static Collection<Option<Integer>> buildEnchantmentSettings(
             int defaultMaxLevel,
             Supplier<Integer> maxLevelGetter,
             Consumer<Integer> maxLevelSetter,
@@ -206,8 +220,29 @@ public class TACZEOConfigScreenHandler {
                         .build()
         );
     }
+    *///?}
 
     private static @NotNull ConfigCategory buildEnchantmentAllowCategory() {
+        //? if >=1.21.1 {
+        List<String> allEnchantments = new ArrayList<>();
+        Minecraft mc = Minecraft.getInstance();
+        ClientLevel level = mc.level;
+        if (level != null) {
+            RegistryAccess registryAccess = level.registryAccess();
+            Optional<HolderLookup.RegistryLookup<Enchantment>> lookup = registryAccess.lookup(Registries.ENCHANTMENT);
+            lookup.ifPresent(registry -> registry.listElementIds()
+                    .map(ResourceKey::location)
+                    .map(ResourceLocation::toString)
+                    .forEach(allEnchantments::add)
+            );
+        }
+        //?} else {
+        /*List<String> allEnchantments = ForgeRegistries.ENCHANTMENTS.getKeys()
+                .stream()
+                .map(ResourceLocation::toString)
+                .toList();
+        *///?}
+
         ConfigCategory.Builder builder = ConfigCategory.createBuilder()
                 .name(Component.translatable("config.tacz_eo.category.allow"))
                 .tooltip(Component.translatable("config.tacz_eo.category.allow.tooltip"))
@@ -215,7 +250,17 @@ public class TACZEOConfigScreenHandler {
                         .name(Component.translatable("config.tacz_eo.category.allow.group.list"))
                         .description(OptionDescription.of(Component.translatable("config.tacz_eo.category.allow.group.list.description")))
                         .binding(Util.<List<ResourceLocation>>make(new ArrayList<>(), list -> {
-                                            list.add(ForgeRegistries.ENCHANTMENTS.getKey(Enchantments.MOB_LOOTING));
+                                            //? if >=1.21.1 {
+                                            list.add(Enchantments.LOOTING.location());
+                                            list.add(TACZEOEnchantments.BULLSEYE.location());
+                                            list.add(TACZEOEnchantments.DEEP_IMPACT.location());
+                                            list.add(TACZEOEnchantments.FIREPOWER.location());
+                                            list.add(TACZEOEnchantments.PRECISION.location());
+                                            list.add(TACZEOEnchantments.PUNCH_THROUGH.location());
+                                            list.add(TACZEOEnchantments.CAPACITY.location());
+                                            list.add(TACZEOEnchantments.BULLET_RETENTION.location());
+                                            //?} else {
+                                            /*list.add(ForgeRegistries.ENCHANTMENTS.getKey(Enchantments.MOB_LOOTING));
                                             list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.BULLSEYE.get()));
                                             list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.DEEP_IMPACT.get()));
                                             list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.FIREPOWER.get()));
@@ -223,6 +268,7 @@ public class TACZEOConfigScreenHandler {
                                             list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.PUNCH_THROUGH.get()));
                                             list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.CAPACITY.get()));
                                             list.add(ForgeRegistries.ENCHANTMENTS.getKey(TACZEOEnchantments.BULLET_RETENTION.get()));
+                                            *///?}
                                         }).stream()
                                         .filter(Objects::nonNull)
                                         .map(ResourceLocation::toString)
@@ -235,10 +281,8 @@ public class TACZEOConfigScreenHandler {
                                         .map(ResourceLocation::parse)
                                         .toList())
                         .controller(option -> DropdownStringControllerBuilder.create(option)
-                                .values(ForgeRegistries.ENCHANTMENTS.getKeys()
-                                        .stream()
-                                        .map(ResourceLocation::toString)
-                                        .toList()))
+                                .values(allEnchantments)
+                                .allowAnyValue(true))
                         .initial("")
                         .build());
 

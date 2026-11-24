@@ -1,209 +1,242 @@
-import tacz_eo.utils.*
+import dev.kikugie.fletching_table.mixin.MixinEnvironment
+import dev.kikugie.stonecutter.controller.task.StonecutterTaskMutexService
 
 plugins {
-  kotlin("jvm")
-  `maven-publish`
-  id("net.neoforged.moddev.legacyforge")
-  id("tacz_eo.common")
-  id("me.modmuss50.mod-publish-plugin")
-  id("dev.isxander.secrets")
+    `maven-publish`
+    id("net.neoforged.moddev.legacyforge")
+    id("me.modmuss50.mod-publish-plugin")
+    id("dev.isxander.secrets")
+    alias(ft.plugins.mixin)
 }
+
+val loader = "forge"
+version = "${sc.properties["mod.version"]}+${sc.current.version}-$loader"
+base.archivesName = sc.properties["mod.id"]
 
 repositories {
-  fun strictMaven(url: String, alias: String, vararg groups: String) = exclusiveContent {
-    forRepository { maven(url) { name = alias } }
-    filter { groups.forEach(::includeGroup) }
-  }
-
-  maven("https://maven.minecraftforge.net")
-  maven("https://maven.bawnorton.com/releases")
-  maven("https://maven.parchmentmc.org")
-  maven("https://thedarkcolour.github.io/KotlinForForge/")
-  maven("https://maven.isxander.dev/releases")
-
-  strictMaven("https://www.cursemaven.com", "Curseforge", "curse.maven")
-  strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
+    maven("https://maven.minecraftforge.net")
+    maven("https://maven.bawnorton.com/releases")
+    maven("https://maven.parchmentmc.org")
+    maven("https://thedarkcolour.github.io/KotlinForForge/")
+    maven("https://maven.isxander.dev/releases")
 }
-
-val minecraft: String by project
-val loader: String by project
-
-base.archivesName = "${mod("id")}-${mod("version")}+$minecraft-$loader"
 
 dependencies {
-  modImplementation("curse.maven:timeless-and-classic-zero-1028108:9454481-sources-9454481")
-  modImplementation("dev.isxander:yet-another-config-lib:3.6.1+1.20.1-forge")
+    modImplementation("curse.maven:timeless-and-classic-zero-1028108:${sc.properties["deps.tacz"]}")
+    modImplementation("dev.isxander:yet-another-config-lib:${sc.properties["deps.yacl"]}-$loader")
 
-  modCompileOnly("maven.modrinth:tacz-tweaks:2.12.2")
-  modRuntimeOnly("thedarkcolour:kotlinforforge:4.11.0")
+    modImplementation("maven.modrinth:tacz-tweaks:${sc.properties["deps.tacz_tweaks"]}")
+    modRuntimeOnly("thedarkcolour:kotlinforforge:${sc.properties["deps.kotlinforforge"]}")
 
-  modCompileOnly("curse.maven:tacz-durability-1065328:7389190")
+    modCompileOnly("curse.maven:tacz-durability-1065328:${sc.properties["deps.tacz_durability"]}")
 
-  modCompileOnly("maven.modrinth:shots-fired:1.20.1-0.2.4.1")
+    modCompileOnly("maven.modrinth:shots-fired:${sc.current.version}-0.2.4.1")
 
-  implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3")!!)
-  jarJar(implementation("io.github.llamalad7:mixinextras-forge:0.5.3")!!)
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${sc.properties["deps.mixinextras"]}")!!)
+    implementation(jarJar("io.github.llamalad7:mixinextras-$loader:${sc.properties["deps.mixinextras"]}")!!)
 
-  implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")!!)
-  jarJar(implementation("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.7-beta.1")!!)
+    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:${sc.properties["deps.mixinsquared"]}")!!)
+    jarJar(implementation("com.github.bawnorton.mixinsquared:mixinsquared-$loader:${sc.properties["deps.mixinsquared"]}")!!)
 
-  annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    annotationProcessor("org.spongepowered:mixin:${sc.properties["deps.mixin"]}:processor")
 }
 
+val requiredJava = JavaVersion.VERSION_17
+
 java {
-  withSourcesJar()
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
+    withSourcesJar()
+    targetCompatibility = requiredJava
+    sourceCompatibility = requiredJava
+
+    toolchain {
+        vendor = JvmVendorSpec.ADOPTIUM
+        languageVersion = JavaLanguageVersion.of(requiredJava.majorVersion)
+    }
 }
 
 legacyForge {
-  version = deps("forge")
-
-  validateAccessTransformers = true
-  accessTransformers.from(rootProject.file("src/main/resources/$minecraft-accesstransformer.cfg"))
-
-  mods {
-    register(mod("id")!!) {
-      sourceSet(sourceSets["main"])
+    enable {
+        forgeVersion = sc.properties["deps.forge_loader"]
     }
-  }
 
-  deps("parchment") {
+    mods {
+        register(sc.properties["mod.id"]) {
+            sourceSet(sourceSets["main"])
+        }
+    }
+
     parchment {
-      val (mc, version) = it.split(':')
-      mappingsVersion = version
-      minecraftVersion = mc
-    }
-  }
-
-  runs {
-    all {
-      gameDirectory = rootProject.file("run")
+        val (mc, version) = sc.properties["deps.parchment"].split(':')
+        mappingsVersion = version
+        minecraftVersion = mc
     }
 
-    register("client") {
-      ideName = "Forge Client $minecraft"
-      client()
+    runs {
+        all {
+            gameDirectory = rootProject.file("run")
+            systemProperty("terminal.ansi", "true")
+        }
 
-      programArgument("--username=Bawnorton")
-      programArgument("--uuid=17c06cab-bf05-4ade-a8d6-ed14aaf70545")
+        register("client") {
+            ideName = "Forge Client ${sc.current.version}"
+            client()
 
-      systemProperty("terminal.ansi", "true")
+            programArgument("--username=Bawnorton")
+            programArgument("--uuid=17c06cab-bf05-4ade-a8d6-ed14aaf70545")
+        }
+
+        register("server") {
+            ideName = "Forge Server ${sc.current.version}"
+            server()
+        }
     }
-
-    register("server") {
-      ideName = "Forge Server $minecraft"
-      server()
-
-      systemProperty("terminal.ansi", "true")
-    }
-  }
-
-  afterEvaluate {
-    runs.configureEach {
-      applyMixinDebugSettings(::jvmArgument, ::systemProperty)
-    }
-  }
 }
 
 mixin {
-  add(sourceSets.main.get(), "${mod("id")}.refmap.json")
-  config("${mod("id")}.mixin.json")
-  config("${mod("id")}.client.mixin.json")
+    add(sourceSets.main.get(), "${sc.properties["mod.id"]}.refmap.json")
+    config("${sc.properties["mod.id"]}.mixin.json")
+    config("${sc.properties["mod.id"]}.client.mixin.json")
 }
 
-sourceSets.main {
-  resources.srcDirs(project.file("src/main/generated/server"), project.file("src/main/generated/client"))
-  resources.exclude(".cache")
+
+fletchingTable {
+    mixins.configure(sourceSets.main) {
+        mixin("${sc.properties["mod.id"]}.mixin.json")
+        mixin("${sc.properties["mod.id"]}.client.mixin.json", "client") {
+            environment = MixinEnvironment.Env.CLIENT
+        }
+    }
+}
+
+stonecutter {
+    replacements.string(constants[loader] == true) {
+        replace("net.neoforged", "net.minecraftforge")
+        replace(".bus.", ".eventbus.")
+    }
+
+    files.disable(
+        !current.parsed.eq("1.20.1"),
+        "**/v1_20_1/"
+    )
+
+    files.disable(
+        !current.parsed.eq("1.21.1"),
+        "**/v1_21_1/"
+    )
 }
 
 tasks {
-  named("createMinecraftArtifacts") {
-    dependsOn("stonecutterGenerate")
-  }
+    processResources {
+        fun MutableMap<String, String>.register(key: String, property: String) {
+            val value: String = sc.properties[property]
+            inputs.property(key, value)
+            set(key, value)
+        }
 
-  register<Copy>("buildAndCollect") {
-    group = "build"
-    from(named<Jar>("reobfJar").map { it.archiveFile })
-    into(rootProject.layout.buildDirectory.file("libs/${mod("version")}"))
-    dependsOn("build")
-  }
+        val props = buildMap {
+            register("id", "mod.id")
+            register("name", "mod.name")
+            register("version", "mod.version")
+            register("minecraft", "mod.mc_compat")
+            register("description", "mod.description")
+            register("license", "mod.license")
+        }
 
-  named<Jar>("jar") {
-    manifest {
-      attributes(
-        "Specification-Title" to mod("name")!!,
-        "Specification-Vendor" to "${mod("author")}",
-        "Specification-Version" to "1",
-        "Implementation-Title" to project.name,
-        "Implementation-Version" to mod("version")!!,
-        "Implementation-Vendor" to "${mod("author")}",
-        "MixinConfigs" to listOf(
-          "${mod("id")}.mixin.json",
-          "${mod("id")}.client.mixin.json"
-        ).joinToString(", ")
-      )
+        filesMatching(listOf("META-INF/mods.toml", "pack.mcmeta")) {
+            expand(props)
+        }
+
+        val mixinJava = "JAVA_${requiredJava.majorVersion}"
+
+        filesMatching("*.mixin.json") {
+            expand("java" to mixinJava)
+        }
+
+        exclude("META-INF/neoforge.mods.toml")
     }
-  }
+
+    named("createMinecraftArtifacts") {
+        dependsOn("stonecutterGenerate")
+
+        usesService(StonecutterTaskMutexService.create(gradle, name))
+    }
+
+    register<Copy>("buildAndCollect") {
+        group = "build"
+        description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
+
+        inputs.property("version", sc.properties["mod.version"])
+        from(named<Jar>("reobfJar").flatMap { it.archiveFile }, named<Jar>("sourcesJar").flatMap { it.archiveFile })
+        into(rootProject.layout.buildDirectory.file("libs/${sc.properties["mod.version"]}"))
+    }
+
+    named<Jar>("jar") {
+        manifest.attributes("MixinConfigs" to listOf(
+            "${sc.properties["mod.id"]}.mixin.json",
+            "${sc.properties["mod.id"]}.client.mixin.json"
+        ).joinToString(", "))
+    }
+
+    withType<AbstractPublishToMaven>().configureEach {
+        usesService(StonecutterTaskMutexService.create(gradle, name))
+    }
 }
 
 val isPublishing = gradle.startParameter.taskNames.any {
-  it.contains("publish", ignoreCase = true)
+    it.contains("publish", ignoreCase = true)
 }
 
 extensions.configure<PublishingExtension> {
-  repositories {
-    maven {
-      name = "bawnorton"
-      url = uri("https://maven.bawnorton.com/releases")
-      if(isPublishing) {
-        credentials {
-          username = onePassword["op://Private/Maven API Key/username"].get()
-          password = onePassword["op://Private/Maven API Key/credential"].get()
+    repositories {
+        maven {
+            name = "bawnorton"
+            url = uri("https://maven.bawnorton.com/releases")
+            if (isPublishing) {
+                credentials {
+                    username = onePassword["op://Private/Maven API Key/username"].get()
+                    password = onePassword["op://Private/Maven API Key/credential"].get()
+                }
+            }
         }
-      }
     }
-  }
-  publications {
-    create<MavenPublication>("maven") {
-      groupId = "${mod("group")}.${mod("id")}"
-      artifactId = "${mod("id")}-$loader"
-      version = "${mod("version")}+$minecraft"
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "${sc.properties["mod.group"]}.${sc.properties["mod.id"]}"
+            artifactId = "${sc.properties["mod.id"]}-$loader"
 
-      from(components["java"])
+            from(components["java"])
+        }
     }
-  }
 }
 
 publishMods {
-  val mrTokenProvider = onePassword["op://Private/Modrinth API Key/credential"]
-  val cfTokenProvider = onePassword["op://Private/Curseforge API Key/credential"]
+    val mrTokenProvider = onePassword["op://Private/Modrinth API Key/credential"]
+    val cfTokenProvider = onePassword["op://Private/Curseforge API Key/credential"]
 
-  type = BETA
-  file = tasks.named<Jar>("reobfJar").map { it.archiveFile.get() }
-  additionalFiles.from(tasks.named<org.gradle.jvm.tasks.Jar>("sourcesJar").map { it.archiveFile.get() })
+    type = STABLE
+    file = tasks.named<Jar>("reobfJar").map { it.archiveFile.get() }
+    additionalFiles.from(tasks.named<Jar>("sourcesJar").map { it.archiveFile.get() })
 
-  displayName = "${mod("name")} Forge ${mod("version")} for $minecraft"
-  version = mod("version")
-  changelog = provider { rootProject.file("CHANGELOG.md").readText() }
-  modLoaders.add(loader)
+    displayName = "${sc.properties["mod.name"]} Forge ${sc.properties["mod.version"]} for ${sc.current.version}"
+    changelog = provider { rootProject.file("CHANGELOG.md").readText() }
+    modLoaders.add(loader)
 
-  val compatibleVersionString = mod("compatible_versions")!!
-  val compatibleVersions = compatibleVersionString.split(",").map { it.trim() }
+    val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")
+        ?.asList().orEmpty().map { it.toString() }
 
-  modrinth {
-    projectId = property("publishing.modrinth") as String
-    accessToken = mrTokenProvider
-    minecraftVersions.addAll(compatibleVersions)
-    requires("timeless-and-classics-zero")
-  }
+    modrinth {
+        projectId = sc.properties["publishing.modrinth"]
+        accessToken = mrTokenProvider
+        minecraftVersions.addAll(compatibleVersions)
+        requires("timeless-and-classics-zero")
+    }
 
-  curseforge {
-    projectId = property("publishing.curseforge") as String
-    accessToken = cfTokenProvider
-    minecraftVersions.addAll(compatibleVersions)
-    server.set(true)
-    client.set(true)
-    requires("timeless-and-classics-zero")
-  }
+    curseforge {
+        projectId = sc.properties["publishing.curseforge"]
+        accessToken = cfTokenProvider
+        minecraftVersions.addAll(compatibleVersions)
+        server.set(true)
+        client.set(true)
+        requires("timeless-and-classics-zero")
+    }
 }
